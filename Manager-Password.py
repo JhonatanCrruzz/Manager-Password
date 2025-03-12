@@ -604,8 +604,9 @@ def listar_credenciales(perfil_seleccionado):
     tabla.add_column("correo", style="bold blue", justify="center")
     tabla.add_column("Contraseña", style="bold yellow", justify="center")
 
+    credenciales_ordenadas = sorted(perfil["credenciales"], key=lambda x: x["servicio"].lower())
 
-    for idx, cred in enumerate(perfil["credenciales"], start=1):
+    for idx, cred in enumerate(credenciales_ordenadas, start=1):
         clave_descifrada = clave_cifrado.decrypt(cred["clave"].encode()).decode()
         tabla.add_row(str(idx), cred["servicio"], cred["usuario"], cred["correo"], clave_descifrada)
 
