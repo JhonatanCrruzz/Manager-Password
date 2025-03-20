@@ -508,18 +508,18 @@ def nueva_credencial(perfil_seleccionado):
     while True:
         servicio = Prompt.ask("[bold bright_blue]🌐[/bold bright_blue] [bold bright_white]Servicio (Ej: Google, Facebook)[/bold bright_white]").strip()
         imprimirseparador()
-        if len(servicio) >= 5:
+        if len(servicio) >= 1:
             break
-        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]El nombre del servicio debe tener al menos 5 caracteres.[/bold bright_white]"+"\n")
+        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]El nombre del servicio debe tener al menos 1 caracter.[/bold bright_white]"+"\n")
         imprimirseparador()
 
 
     while True:
         usuario_servicio = Prompt.ask("[bold bright_green]👤[/bold bright_green] [bold bright_white]Usuario[/bold bright_white]").strip()
         imprimirseparador()
-        if len(usuario_servicio) >= 5:
+        if len(usuario_servicio) >= 1:
             break
-        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]El nombre del usuario debe tener al menos 5 caracteres.[/bold bright_white]"+"\n")
+        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]El nombre del usuario debe tener al menos 1 caracter.[/bold bright_white]"+"\n")
         imprimirseparador()
 
     while True:
@@ -532,16 +532,27 @@ def nueva_credencial(perfil_seleccionado):
         imprimirseparador()
 
     while True:
-        clave_servicio = Prompt.ask("[bold bright_yellow]🔑[/bold bright_yellow] [bold bright_white]Contraseña[/bold bright_white]", password=False).strip()
+        contraseña_servicio = Prompt.ask("[bold bright_yellow]🔑[/bold bright_yellow] [bold bright_white]Contraseña[/bold bright_white]", password=False).strip()
         imprimirseparador()
-        if len(clave_servicio) >= 5:
+        if len(contraseña_servicio) >= 1:
             break
-        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]La contraseña debe tener al menos 5 caracteres.[/bold bright_white]"+"\n")
+        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]La contraseña debe tener al menos 1 caracter.[/bold bright_white]"+"\n")
         imprimirseparador()
 
+    while True:
+        clave_servicio = Prompt.ask("[bold bright_yellow]🔑[/bold bright_yellow] [bold bright_white]Clave[/bold bright_white]", password=False).strip()
+        imprimirseparador()
+        if len(clave_servicio) >= 1:
+            break
+        console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]La contraseña debe tener al menos 1 caracter.[/bold bright_white]"+"\n")
+        imprimirseparador()
+
+
     # Cifrar la contraseña
+    contraseña_cifrado = Fernet(derivar_clave(perfil["clave_maestra_cifrada"]))
+    contraseña_cifrada = contraseña_cifrado.encrypt(contraseña_servicio.encode()).decode()
     clave_cifrado = Fernet(derivar_clave(perfil["clave_maestra_cifrada"]))
-    clave_cifrada = clave_cifrado.encrypt(clave_servicio.encode()).decode()
+    clave_servicio = clave_cifrado.encrypt(clave_servicio.encode()).decode()
 
     # Agregar credencial al usuario activo
     if "credenciales" not in perfil:
@@ -551,7 +562,8 @@ def nueva_credencial(perfil_seleccionado):
         "servicio": servicio,
         "usuario": usuario_servicio,
         "correo": correo_servicio,
-        "clave": clave_cifrada
+        "contraseña": contraseña_cifrada,
+        "clave" : clave_servicio
     })
 
     # Guardar cambios en el JSON
@@ -590,8 +602,9 @@ def listar_credenciales(perfil_seleccionado):
         imprimirseparador()
         return
 
+    contraseña_cifrado = Fernet(derivar_clave(perfil["clave_maestra_cifrada"]))
     clave_cifrado = Fernet(derivar_clave(perfil["clave_maestra_cifrada"]))
-
+    
     console.print(Panel(f"[bold bright_Magenta]📌[/bold bright_Magenta] [bold bright_white]LISTA DE CREDENCIALES USUARIO [bold bright_yellow]{perfil_seleccionado}[/bold bright_yellow] [/bold bright_white] [bold bright_Magenta]📌[/bold bright_Magenta]"))
     print("\n")
 
@@ -601,14 +614,19 @@ def listar_credenciales(perfil_seleccionado):
     tabla.add_column("#", style="bold cyan", justify="center")
     tabla.add_column("Servicio", style="bold magenta", justify="center")
     tabla.add_column("Usuario", style="bold green", justify="center")
-    tabla.add_column("correo", style="bold blue", justify="center")
+    tabla.add_column("Correo", style="bold blue", justify="center")
     tabla.add_column("Contraseña", style="bold yellow", justify="center")
+    tabla.add_column("Clave", style="bold red", justify="center")
+
+
 
     credenciales_ordenadas = sorted(perfil["credenciales"], key=lambda x: x["servicio"].lower())
 
     for idx, cred in enumerate(credenciales_ordenadas, start=1):
+        contraseña_descifrada = contraseña_cifrado.decrypt(cred["contraseña"].encode()).decode()
         clave_descifrada = clave_cifrado.decrypt(cred["clave"].encode()).decode()
-        tabla.add_row(str(idx), cred["servicio"], cred["usuario"], cred["correo"], clave_descifrada)
+
+        tabla.add_row(str(idx), cred["servicio"], cred["usuario"], cred["correo"], contraseña_descifrada, clave_descifrada)
 
 
 
@@ -760,42 +778,6 @@ def cambio_clave_maestra(perfil_seleccionado):
     console.print("[bold bright_green]✅[/bold bright_green] [bold bright_white]Clave maestra cambiada y credenciales actualizadas.[/bold bright_white]"+"\n")
     imprimirseparador()
 
-
-
-    # clave_maestra = Prompt.ask("[bold bright_yellow]🔑[/bold bright_yellow] [bold bright_white]Ingrese su clave maestra actual[/bold bright_white]", password=False).strip()
-    # print("\n")
-
-    # if verificar_clave_maestra(perfil_seleccionado, clave_maestra):
-    #     imprimirseparador()
-
-    # nueva_clave = Prompt.ask("[bold bright_yellow]🔑 Ingrese su nueva clave maestra[/bold bright_yellow]", password=True).strip()
-
-    # while True:        
-    #     clave_maestra_confirmacion = Prompt.ask("[bold bright_yellow]🔑[bold bright_yellow] [bold bright_white]Repita la nueva clave maestra[/bold bright_white]").strip()
-    #     print("\n")
-    #     if clave_maestra == clave_maestra_confirmacion:
-    #         break
-    #     imprimirseparador()
-    #     console.print("[bold bright_red]❌[bold bright_red] [bold bright_white]Las claves no coinciden.[/bold bright_white]"+"\n")
-    #     imprimirseparador()
-
-    # # Recifrar credenciales con la nueva clave
-    # clave_nueva = Fernet(derivar_clave(nueva_clave))
-    # clave_antigua = Fernet(derivar_clave(perfil["clave_maestra_cifrada"]))
-
-
-    # for cred in perfil.get("credenciales", []):
-    #     clave_descifrada = clave_antigua.decrypt(cred["clave"].encode()).decode()
-    #     cred["clave"] = clave_nueva.encrypt(clave_descifrada.encode()).decode()
-
-    # perfil["clave_maestra_cifrada"] = cifrar_clave_maestra(nueva_clave)
-
-
-    # with open(USUARIOS_FILE, "w") as f:
-    #     json.dump(usuarios, f, indent=4)
-
-    # console.print("[bold bright_green]✅ Clave maestra cambiada y credenciales actualizadas.[/bold bright_green]")
-
 # ─────────────────────────────────────────────────────────────────────────────
 # 🔄 ACTUALIZAR INFORMAACIÓN
 # ─────────────────────────────────────────────────────────────────────────────
@@ -865,30 +847,6 @@ def actualizar_informacion(perfil_seleccionado):
     console.print("[bold bright_green]✅[bold bright_green] [bold bright_white]Información actualizada con éxito.[/bold bright_white]\n")
     imprimirseparador()
     main()
-
-    # if opcion == "1":
-    #     nuevo_nombre = Prompt.ask("[bold bright_yellow]✏️ Ingrese el nuevo nombre de usuario[/bold bright_yellow]").strip()
-    #     perfil["nombre_usuario"] = nuevo_nombre
-        
-    # elif opcion == "2":
-    #     nuevo_correo = Prompt.ask("[bold bright_blue]📧 Ingrese el nuevo correo electrónico[/bold bright_blue]").strip()
-    #     perfil["correo"] = nuevo_correo
-
-    # elif opcion == "0":
-    #     return
-    # else:
-    #     imprimirseparador()
-    #     console.print("[bold bright_red]❌[/bold bright_red] [bold bright_white]Opción inválida.[/bold bright_white]"+"\n")
-    #     imprimirseparador()
-    #     return
-
-    # with open(USUARIOS_FILE, "w") as f:
-    #     json.dump(usuarios, f, indent=4)
-
-    # imprimirseparador()
-    # console.print("[bold bright_green]✅[bold bright_green] [bold bright_white]Información actualizada con éxito.[/bold bright_white]"+"\n")
-    # imprimirseparador()
-    # main()
 
 if __name__ == "__main__":
     main()
