@@ -1,64 +1,79 @@
-# Gestión de Credenciales Seguras
+# 🔐 Manager Password
 
-Este proyecto permite gestionar credenciales de manera segura mediante el uso de una clave maestra y cifrado de las credenciales de acceso a servicios. El sistema permite registrar, listar, eliminar y actualizar las credenciales asociadas a un usuario de forma fácil y segura.
+## 📌 Description 
 
-## Características
+This project allows for secure credential management through the use of a master key and encryption of service access credentials. The system allows for easy and secure registration, listing, deletion, and updating of credentials associated with a user.
 
-- **Cifrado de contraseñas y claves:** Las credenciales de acceso se almacenan cifradas utilizando la clave maestra.
-- **Gestión de perfiles de usuario:** Puedes crear y gestionar múltiples perfiles de usuario.
-- **Recifrado de credenciales:** Al cambiar la clave maestra, todas las credenciales se actualizan con la nueva clave.
-- **Interfaz de usuario sencilla:** Interfaz interactiva para gestionar las credenciales a través de la consola.
+## 🚀 Characteristics  
 
-## Requisitos
+-✅ **Password and key encryption:** Access credentials are stored encrypted using the master key.
+-✅ **User profile management:** You can create and manage multiple user profiles.
+-✅ **Credential re-encryption:** When you change the master key, all credentials are updated with the new key.
+-✅ **Simple user interface:** Interactive interface for managing credentials through the console.
+
+## 🛠️ Technologies Used
+- Python
+-   
+## 📝 Requisitos
 
 - Python 3.x
-- Dependencias:
+- Dependencies:
   - `cryptography`
   - `rich`
   - `prompt_toolkit`
   - `json`
 
-## Instalación
+## 📥 Installation and Use 
 
-Para instalar las dependencias necesarias, puedes usar `pip`:
+To install the necessary dependencies, you can use `pip`:
 
 ```bash
 pip install cryptography rich prompt_toolkit
 ```
-## Uso
-Crear un nuevo perfil
-1. Ejecuta el programa:
-  ```bash
+## Usage
+Create a new profile
+1. Run the program:
+```bash
 python main.py
-``` 
-2. Selecciona la opción para crear un nuevo perfil y proporciona los datos requeridos (nombre de usuario y clave maestra).
+```
+2. Select the option to create a new profile and provide the required information (username and master key).
 
-## Gestionar credenciales
-Una vez creado el perfil, puedes realizar las siguientes acciones:
+## Manage credentials
+Once the profile is created, you can perform the following actions:
 
-- Listar credenciales: Ver todas las credenciales asociadas a un perfil.
-- Eliminar credencial: Eliminar una credencial específica del perfil seleccionado.
-- Actualizar información del perfil: Cambiar el nombre de usuario o correo electrónico.
-- Cambiar clave maestra: Cambiar la clave maestra que cifra las credenciales almacenadas. Esto actualizará todas las credenciales asociadas.
+- List credentials: View all credentials associated with a profile.
+- Delete credential: Remove a specific credential from the selected profile.
+- Update profile information: Change the username or email address.
+- Change master key: Change the master key that encrypts stored credentials. This will update all associated credentials.
 
-## Ejemplo de flujo de trabajo
-Iniciar sesión con tu perfil.
+## Workflow example
+Log in with your profile.
 
-- Listar tus credenciales para visualizar los servicios, usuarios, correos y contraseñas.
-- Si deseas eliminar una credencial, selecciona la opción adecuada y confirma la eliminación.
-- Si decides actualizar tu clave maestra, ingresa tu clave actual, luego la nueva clave y repítela para confirmarla.
-- Si necesitas actualizar la información del perfil, puedes modificar tu nombre de usuario o correo electrónico.
+- List your credentials to view services, users, email addresses, and passwords.
+- If you want to delete a credential, select the appropriate option and confirm the deletion.
+- If you decide to update your master password, enter your current password, then the new password, and repeat it to confirm.
+- If you need to update your profile information, you can change your username or email address.
 
-## Seguridad
+## 🛡️ Seguridad
 
-- Cifrado simétrico: El sistema utiliza Fernet de la librería cryptography para cifrar y descifrar las contraseñas y claves, asegurando la protección de las credenciales almacenadas.
-- Clave maestra: La clave maestra es el punto de acceso principal a todas las credenciales. Es crucial que la clave maestra se mantenga en secreto y se elija de manera segura.
+- Symmetric encryption: The system uses Fernet from the cryptography library to encrypt and decrypt passwords and keys, ensuring the protection of stored credentials.
+- Master key: The master key is the primary access point to all credentials. It is crucial that the master key be kept secret and chosen securely.
 
-### Contribuciones
-Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
+## 📝 Contributions
 
-- Haz un fork del repositorio.
-- Crea una rama (git checkout -b feature-nueva).
-- Realiza tus cambios y haz commit (git commit -am 'Agregando nueva funcionalidad').
-- Haz push a la rama (git push origin feature-nueva).
-- Crea un pull request.
+If you'd like to improve this project, any contribution is welcome!
+
+1. Fork the repository.
+2. Create a new branch:
+```bash
+   git checkout -b mi-nueva-funcionalidad
+```
+3. Make your improvements and commit:
+```bash
+   git commit -m "Agregada nueva funcionalidad"
+```
+4.Upgrade the gears:
+```bash
+  git push origin mi-nueva-funcionalidad
+```
+5. Create a pull request explaining your changes.
