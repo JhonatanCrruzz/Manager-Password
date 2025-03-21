@@ -14,7 +14,7 @@ This project allows for secure credential management through the use of a master
 ## 🛠️ Technologies Used
 - Python
   
-## 📝 Requisitos
+## 📝 Requirements
 
 - Python 3.x
 - Dependencies:
