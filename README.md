@@ -6,10 +6,10 @@ This project allows for secure credential management through the use of a master
 
 ## 🚀 Characteristics  
 
--✅ **Password and key encryption:** Access credentials are stored encrypted using the master key.
--✅ **User profile management:** You can create and manage multiple user profiles.
--✅ **Credential re-encryption:** When you change the master key, all credentials are updated with the new key.
--✅ **Simple user interface:** Interactive interface for managing credentials through the console.
+✅ **Password and key encryption:** Access credentials are stored encrypted using the master key.
+✅ **User profile management:** You can create and manage multiple user profiles.
+✅ **Credential re-encryption:** When you change the master key, all credentials are updated with the new key.
+✅ **Simple user interface:** Interactive interface for managing credentials through the console.
 
 ## 🛠️ Technologies Used
 - Python
